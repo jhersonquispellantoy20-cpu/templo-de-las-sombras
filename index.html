@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101522">
+  <title>Templo de las Sombras</title>
+  <link rel="stylesheet" href="css/game.css">
+  <script defer src="js/levels.js"></script>
+  <script defer src="js/game.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Templo de las Sombras, inicio">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>TEMPLO <i>DE LAS SOMBRAS</i></span>
+      </a>
+      <div class="top-note"><span class="live-dot"></span> AVENTURA OFFLINE · 4 NIVELES</div>
+    </header>
+
+    <section class="game-frame" aria-label="Videojuego de plataformas">
+      <div class="hud" id="hud" hidden>
+        <div class="hud-level"><span class="eyebrow">EXPEDICIÓN</span><strong id="level-name">Nivel 1</strong></div>
+        <div class="hud-stat"><span class="stat-icon heart">♥</span><span id="lives">3</span><small>VIDAS</small></div>
+        <div class="hud-stat"><span class="stat-icon gem">◆</span><span id="shards">0/3</span><small>FRAGMENTOS</small></div>
+        <div class="hud-stat"><span class="stat-icon coin">◈</span><span id="score">0</span><small>PUNTOS</small></div>
+        <div class="hud-stat timer-stat"><span class="stat-icon timer-icon">◷</span><span id="timer">02:00</span><small>TIEMPO</small></div>
+        <button id="pause-button" class="icon-button" type="button" aria-label="Pausar juego">Ⅱ</button>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="game" width="960" height="540" aria-label="Juego de plataformas. Usa las flechas o A y D para moverte y espacio para saltar."></canvas>
+        <div id="overlay" class="overlay">
+          <div class="overlay-card">
+            <div class="sun-symbol" aria-hidden="true"><span>✦</span></div>
+            <p class="eyebrow" id="overlay-kicker">UNA AVENTURA DE PLATAFORMAS</p>
+            <h1 id="overlay-title">El templo<br><em>despierta.</em></h1>
+            <p id="overlay-copy" class="overlay-copy">Cruza ruinas antiguas, reúne los fragmentos y descubre el secreto que duerme bajo la arena.</p>
+            <div id="controls" class="controls">
+              <span><kbd>←</kbd><kbd>→</kbd> o <kbd>A</kbd><kbd>D</kbd> mover</span>
+              <span><kbd>ESPACIO</kbd> saltar</span>
+              <span><kbd>X</kbd> impulso</span>
+              <span><kbd>ESC</kbd> pausa</span>
+            </div>
+            <button id="main-action" class="primary-button" type="button">Comenzar aventura <span>→</span></button>
+            <p class="small-note">Sin instalaciones · Se juega en el navegador</p>
+          </div>
+        </div>
+      </div>
+      <section class="expedition-panel" aria-label="Progreso y recompensas de la expedición">
+        <div class="expedition-heading">
+          <div>
+            <p class="eyebrow">TU RECORRIDO</p>
+            <h2>Progreso de la expedición</h2>
+          </div>
+          <span id="progress-count" class="progress-count" aria-live="polite">0 de 4 superados</span>
+        </div>
+        <ol id="level-progress" class="level-progress" aria-label="Estado de los cuatro niveles"></ol>
+        <div class="reward-guide">
+          <span class="reward-icon" aria-hidden="true">◈</span>
+          <p><b>RECOMPENSAS POR NIVEL</b><br>+150 puntos al completar · +50 por fragmento · +2 por cada segundo restante · +1 vida extra al superar los niveles 2 y 4.</p>
+        </div>
+      </section>
+      <footer class="game-footer">
+        <span><b>OBJETIVO</b> Reúne los 3 fragmentos y alcanza el portal.</span>
+        <span id="footer-message">Tu progreso se guarda en este dispositivo.</span>
+      </footer>
+    </section>
+    <footer class="page-footer"><span>UNA AVENTURA DE <b>PLATAFORMAS 2D</b></span><span>HECHO PARA EXPLORAR <b>✦</b></span></footer>
+  </main>
+</body>
+</html>
