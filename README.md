@@ -37,7 +37,7 @@ Cuando hagas cambios, sube los archivos actualizados a la rama `main`. GitHub Pa
 
 El progreso y el récord se guardan en el navegador y dispositivo de cada jugador.
 
-Para entrar directamente a jugar sin pasar por la portada, comparte el enlace del juego añadiendo `?jugar=1` al final de la dirección.
+Para entrar directamente a jugar sin pasar por la portada ni las instrucciones, comparte este enlace: `https://jhersonquispellantoy20-cpu.github.io/templo-de-las-sombras/?jugar=1`.
 
 ## Controles
 
