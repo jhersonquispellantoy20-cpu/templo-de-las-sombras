@@ -4,8 +4,10 @@
   const canvas = document.getElementById("game");
   const ctx = canvas.getContext("2d");
   const overlay = document.getElementById("overlay");
+  const instructionOverlay = document.getElementById("instruction-overlay");
   const hud = document.getElementById("hud");
   const action = document.getElementById("main-action");
+  const acceptStart = document.getElementById("accept-start");
   const held = new Set();
   const WIDTH = canvas.width;
   const HEIGHT = canvas.height;
@@ -18,6 +20,12 @@
     kicker: document.getElementById("overlay-kicker"),
     copy: document.getElementById("overlay-copy"),
     controls: document.getElementById("controls"),
+    guide: document.getElementById("start-guide"),
+    mobileGuide: document.querySelector(".mobile-start-guide"),
+    playGuide: document.getElementById("play-guide"),
+    guideObjective: document.getElementById("guide-objective"),
+    guideArrow: document.getElementById("guide-arrow"),
+    guideDirection: document.getElementById("guide-direction-label"),
     level: document.getElementById("level-name"),
     lives: document.getElementById("lives"),
     shards: document.getElementById("shards"),
@@ -113,12 +121,49 @@
   function showOverlay(mode, title, copy, buttonText) {
     state = mode;
     overlay.hidden = false;
+    instructionOverlay.hidden = true;
+    ui.playGuide.hidden = true;
     hud.hidden = mode === "menu";
     ui.title.innerHTML = title;
     ui.copy.textContent = copy;
     ui.kicker.textContent = mode === "menu" ? "UNA AVENTURA DE PLATAFORMAS" : "TEMPLO DE LAS SOMBRAS";
     ui.controls.hidden = mode !== "menu";
+    ui.guide.hidden = mode !== "menu";
+    ui.mobileGuide.hidden = mode !== "menu";
     action.innerHTML = `${buttonText} <span>→</span>`;
+  }
+
+  function showInstructions() {
+    state = "instructions";
+    overlay.hidden = true;
+    instructionOverlay.hidden = false;
+    hud.hidden = true;
+    ui.playGuide.hidden = true;
+    acceptStart.focus();
+  }
+
+  function updatePlayGuide() {
+    if (state !== "playing") {
+      ui.playGuide.hidden = true;
+      return;
+    }
+    ui.playGuide.hidden = false;
+    const pendingShards = level.shards
+      .map(([x], index) => ({ x, index }))
+      .filter(shard => !collected.has(shard.index));
+    const targetX = pendingShards.length
+      ? pendingShards.reduce((nearest, shard) =>
+        Math.abs(shard.x - player.x) < Math.abs(nearest.x - player.x) ? shard : nearest
+      ).x
+      : level.exit.x + level.exit.w / 2;
+    const direction = targetX >= player.x + player.w / 2 ? 1 : -1;
+    ui.guideObjective.textContent = pendingShards.length
+      ? `Fragmentos ${fragments}/3`
+      : "¡Portal desbloqueado!";
+    ui.guideArrow.textContent = direction > 0 ? "→" : "←";
+    ui.guideDirection.textContent = pendingShards.length
+      ? direction > 0 ? "Busca el fragmento a la derecha" : "Busca el fragmento a la izquierda"
+      : direction > 0 ? "Ve al portal a la derecha" : "Ve al portal a la izquierda";
   }
 
   function begin() {
@@ -127,9 +172,11 @@
     completedLevels = new Set();
     loadLevel(0);
     state = "playing";
+    instructionOverlay.hidden = true;
     overlay.hidden = true;
     hud.hidden = false;
     updateProgress();
+    updatePlayGuide();
     lastTime = performance.now();
   }
 
@@ -137,10 +184,12 @@
     lives = 3;
     loadLevel(levelIndex);
     state = "playing";
+    instructionOverlay.hidden = true;
     overlay.hidden = true;
     hud.hidden = false;
     ui.footer.textContent = `Reintentando ${level.name}. Tus niveles superados y puntos se conservan.`;
     updateProgress();
+    updatePlayGuide();
     lastTime = performance.now();
   }
 
@@ -269,6 +318,7 @@
     if (fragments === 3 && overlaps(p, level.exit)) nextLevel();
     cameraX += ((p.x - WIDTH * 0.36) - cameraX) * 0.09;
     cameraX = Math.max(0, Math.min(level.width - WIDTH, cameraX));
+    updatePlayGuide();
     particles = particles.filter(part => part.life > 0);
     particles.forEach(part => { part.x += part.vx; part.y += part.vy; part.vy += 0.08; part.life -= 1; });
   }
@@ -287,15 +337,66 @@
     gradient.addColorStop(1, "#d1945d");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    for (let i = 0; i < 64; i++) {
+      const x = (i * 137 + 31 - cameraX * 0.025) % WIDTH;
+      const y = 22 + (i * 67) % 220;
+      const size = i % 9 === 0 ? 2 : 1;
+      ctx.globalAlpha = 0.25 + (i % 4) * 0.1;
+      ctx.fillStyle = i % 7 === 0 ? "#f3d59d" : "#e5e6df";
+      ctx.fillRect((x + WIDTH) % WIDTH, y, size, size);
+    }
+    ctx.globalAlpha = 1;
     const sunX = 720 - cameraX * 0.04;
     const sun = ctx.createRadialGradient(sunX, 130, 8, sunX, 130, 100);
     sun.addColorStop(0, "rgba(247,204,137,.62)");
     sun.addColorStop(1, "rgba(247,204,137,0)");
     ctx.fillStyle = sun;
     ctx.fillRect(sunX - 105, 25, 210, 210);
+    ctx.fillStyle = "rgba(247,204,137,.56)";
+    ctx.beginPath();
+    ctx.arc(sunX, 130, 31, 0, Math.PI * 2);
+    ctx.fill();
     drawDunes(0.13, 315, "#526071", 54);
+    drawBackgroundRuins();
     drawDunes(0.25, 390, "#454c55", 73);
     drawDunes(0.43, 447, "#343b40", 45);
+  }
+
+  function drawBackgroundRuins() {
+    const offset = cameraX * 0.16;
+    const worldWidth = level ? level.width : WIDTH;
+    for (let worldX = -100; worldX < worldWidth + 600; worldX += 570) {
+      const x = worldX - offset;
+      if (x < -180 || x > WIDTH + 180) continue;
+      const scale = 0.65 + ((Math.floor(worldX / 570) % 3) + 3) % 3 * 0.12;
+      const baseY = 342 + (Math.floor(worldX / 570) % 2) * 17;
+      drawTempleSilhouette(x, baseY, scale, "#303947");
+    }
+  }
+
+  function drawTempleSilhouette(x, baseY, scale, color) {
+    ctx.save();
+    ctx.translate(x, baseY);
+    ctx.scale(scale, scale);
+    ctx.fillStyle = color;
+    ctx.fillRect(-70, -7, 140, 8);
+    ctx.fillRect(-55, -54, 110, 47);
+    ctx.fillRect(-72, -62, 144, 9);
+    ctx.fillRect(-47, -80, 94, 8);
+    ctx.fillRect(-38, -101, 76, 22);
+    ctx.beginPath();
+    ctx.moveTo(-48, -101);
+    ctx.lineTo(0, -125);
+    ctx.lineTo(48, -101);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "rgba(233,184,101,.15)";
+    for (let column = -42; column <= 30; column += 24) {
+      ctx.fillRect(column, -48, 7, 38);
+      ctx.fillRect(column - 2, -51, 11, 4);
+    }
+    ctx.fillRect(-9, -34, 18, 27);
+    ctx.restore();
   }
 
   function drawDunes(factor, baseY, color, height) {
@@ -467,7 +568,9 @@
   }
 
   action.addEventListener("click", () => {
-    if (state === "menu" || state === "victory") {
+    if (state === "menu") {
+      showInstructions();
+    } else if (state === "victory") {
       begin();
     } else if (state === "gameover") {
       retryCurrentLevel();
@@ -477,9 +580,11 @@
       loadLevel(levelIndex + 1);
       state = "playing";
       overlay.hidden = true;
+      updatePlayGuide();
       lastTime = performance.now();
     }
   });
+  acceptStart.addEventListener("click", begin);
   document.getElementById("pause-button").addEventListener("click", togglePause);
   window.addEventListener("keydown", event => {
     if (["ArrowLeft", "ArrowRight", "ArrowUp", "Space"].includes(event.code)) event.preventDefault();

@@ -16,7 +16,7 @@
         <span class="brand-mark" aria-hidden="true">✦</span>
         <span>TEMPLO <i>DE LAS SOMBRAS</i></span>
       </a>
-      <div class="top-note"><span class="live-dot"></span> AVENTURA OFFLINE · 4 NIVELES</div>
+      <div class="top-note"><span class="live-dot"></span> AVENTURA 2D · 4 NIVELES</div>
     </header>
 
     <section class="game-frame" aria-label="Videojuego de plataformas">
@@ -30,12 +30,42 @@
       </div>
       <div class="canvas-wrap">
         <canvas id="game" width="960" height="540" aria-label="Juego de plataformas. Usa las flechas o A y D para moverte y espacio para saltar."></canvas>
+        <div id="instruction-overlay" class="instruction-overlay" hidden>
+          <section class="instruction-card" role="dialog" aria-modal="true" aria-labelledby="instruction-title">
+            <div class="instruction-emblem" aria-hidden="true">✦</div>
+            <p class="eyebrow">ANTES DE ENTRAR AL TEMPLO</p>
+            <h2 id="instruction-title">Tu aventura comienza aquí</h2>
+            <p class="instruction-intro">Usa estas teclas para explorar las ruinas, esquivar peligros y encontrar la salida.</p>
+            <div class="instruction-keys">
+              <div><kbd>← →</kbd><kbd>A / D</kbd><span>Moverte a izquierda y derecha</span></div>
+              <div><kbd>ESPACIO</kbd><kbd>↑ / W</kbd><span>Saltar sobre huecos y trampas</span></div>
+              <div><kbd>X</kbd><kbd>SHIFT</kbd><span>Impulsarte para esquivar</span></div>
+              <div><kbd>ESC</kbd><span>Pausar la partida</span></div>
+            </div>
+            <div class="instruction-objective">
+              <span aria-hidden="true">◆</span>
+              <p><strong>Tu misión</strong><br>Reúne los 3 fragmentos y llega al portal. La guía en pantalla te indicará hacia dónde avanzar.</p>
+            </div>
+            <button id="accept-start" class="primary-button instruction-start" type="button">Aceptar y empezar a jugar <span>→</span></button>
+          </section>
+        </div>
+        <aside id="play-guide" class="play-guide" aria-label="Guía de teclas y dirección" hidden>
+          <div class="play-guide-heading"><span class="guide-spark" aria-hidden="true">✦</span> GUÍA DE EXPEDICIÓN</div>
+          <p id="guide-objective" class="guide-objective">Reúne los fragmentos</p>
+          <div class="guide-direction"><span id="guide-arrow" aria-hidden="true">→</span><span id="guide-direction-label">Busca el fragmento a la derecha</span></div>
+          <div class="guide-keys">
+            <span><kbd>← → / A D</kbd> mover</span>
+            <span><kbd>ESPACIO / ↑ / W</kbd> saltar</span>
+            <span><kbd>X / SHIFT</kbd> impulso</span>
+            <span><kbd>ESC</kbd> pausa</span>
+          </div>
+        </aside>
         <div id="overlay" class="overlay">
           <div class="overlay-card">
             <div class="sun-symbol" aria-hidden="true"><span>✦</span></div>
             <p class="eyebrow" id="overlay-kicker">UNA AVENTURA DE PLATAFORMAS</p>
-            <h1 id="overlay-title">El templo<br><em>despierta.</em></h1>
-            <p id="overlay-copy" class="overlay-copy">Cruza ruinas antiguas, reúne los fragmentos y descubre el secreto que duerme bajo la arena.</p>
+            <h1 id="overlay-title">Templo<br><em>de las Sombras</em></h1>
+            <p id="overlay-copy" class="overlay-copy">Las ruinas han despertado. Reúne los fragmentos, esquiva las trampas y descubre qué aguarda al final del templo.</p>
             <div id="controls" class="controls">
               <span><kbd>←</kbd><kbd>→</kbd> o <kbd>A</kbd><kbd>D</kbd> mover</span>
               <span><kbd>ESPACIO</kbd> saltar</span>
@@ -43,8 +73,18 @@
               <span><kbd>ESC</kbd> pausa</span>
             </div>
             <button id="main-action" class="primary-button" type="button">Comenzar aventura <span>→</span></button>
-            <p class="small-note">Sin instalaciones · Se juega en el navegador</p>
+            <p class="mobile-start-guide">1. Pulsa comenzar · 2. Reúne 3 fragmentos · 3. Llega al portal</p>
+            <p class="mobile-controls">← → / A-D mover · Espacio saltar · X impulso</p>
+            <p class="small-note">4 niveles · Una expedición entre las ruinas</p>
           </div>
+          <aside id="start-guide" class="start-guide" aria-label="Pasos para iniciar y jugar">
+            <p class="eyebrow">TU PRIMERA EXPEDICIÓN</p>
+            <ol>
+              <li><span>01</span><div><strong>Inicia</strong><small>Pulsa «Comenzar aventura».</small></div></li>
+              <li><span>02</span><div><strong>Muévete</strong><small>← → o A/D para caminar; Espacio para saltar.</small></div></li>
+              <li><span>03</span><div><strong>Encuentra la salida</strong><small>Reúne los 3 fragmentos y alcanza el portal.</small></div></li>
+            </ol>
+          </aside>
         </div>
       </div>
       <section class="expedition-panel" aria-label="Progreso y recompensas de la expedición">
