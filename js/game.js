@@ -594,6 +594,7 @@
   window.addEventListener("keyup", event => held.delete(event.code));
   window.addEventListener("blur", () => held.clear());
 
+  if (new URLSearchParams(window.location.search).get("jugar") === "1") begin();
   draw();
   requestAnimationFrame(frame);
 })();
