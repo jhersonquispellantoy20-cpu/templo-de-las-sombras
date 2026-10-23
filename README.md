@@ -32,13 +32,13 @@ Cuando hagas cambios, sube los archivos actualizados a la rama `main`. GitHub Pa
 
 El instalador `.exe` incluye el juego y permite crear accesos directos en el escritorio y en el menú Inicio. Se ejecuta sin conexión a Internet.
 
-1. Abre [Releases](https://github.com/jhersonquispellantoy20-cpu/templo-de-las-sombras/releases/latest) y descarga `Templo-de-las-Sombras-Setup-1.0.0.exe`.
+1. Abre [Releases](https://github.com/jhersonquispellantoy20-cpu/templo-de-las-sombras/releases/latest) y descarga el instalador `.exe` más reciente.
 2. Abre el archivo descargado y sigue los pasos del instalador.
 3. Inicia **Templo de las Sombras** desde el acceso directo del escritorio o el menú Inicio.
 
 Si Windows muestra una advertencia de Microsoft Defender SmartScreen, es porque el instalador no tiene firma digital de editor. Descárgalo únicamente desde la sección **Releases** de este repositorio.
 
-Para generar y publicar el instalador desde el proyecto, crea una etiqueta `v1.0.0` y súbela a GitHub. La acción `.github/workflows/build-windows-installer.yml` compilará el `.exe` y lo adjuntará a un GitHub Release. El juego del navegador seguirá disponible mediante GitHub Pages.
+Para generar y publicar el instalador desde el proyecto, crea y sube una etiqueta con formato `v*` a GitHub. La acción `.github/workflows/build-windows-installer.yml` compilará el `.exe` y lo adjuntará a un GitHub Release. El juego del navegador seguirá disponible mediante GitHub Pages.
 
 ### Instrucciones para jugar
 

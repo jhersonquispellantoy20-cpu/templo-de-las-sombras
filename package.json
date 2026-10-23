@@ -1,13 +1,13 @@
 {
   "name": "templo-de-las-sombras",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Aventura de plataformas 2D instalable para Windows",
   "author": "Templo de las Sombras",
   "main": "electron/main.cjs",
   "scripts": {
     "start": "electron .",
-    "dist:win": "electron-builder --win nsis"
+    "dist:win": "electron-builder --win nsis --publish never"
   },
   "devDependencies": {
     "electron": "^45.0.0",
